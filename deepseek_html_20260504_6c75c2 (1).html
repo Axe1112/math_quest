@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Арифметический взлом | Миссия 5 класса</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: radial-gradient(circle at 20% 50%, #0a0f1e, #03060c);
+            font-family: 'Courier New', 'Fira Code', monospace;
+            color: #0f0;
+            min-height: 100vh;
+            padding: 20px;
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 2px #0f0, 0 0 5px #0f0; }
+            100% { text-shadow: 0 0 10px #0f0, 0 0 20px #0f0; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); box-shadow: 0 0 20px #0ff; }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 30px;
+            border: 1px solid #0f0;
+            box-shadow: 0 0 50px rgba(0, 255, 0, 0.2);
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            animation: glow 1.5s infinite alternate;
+            letter-spacing: 5px;
+            margin-bottom: 10px;
+        }
+
+        .glitch {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #8f8;
+            margin-bottom: 30px;
+            border-bottom: 1px dashed #0f0;
+            display: inline-block;
+            width: auto;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .timer {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: bold;
+            background: #000;
+            display: inline-block;
+            width: auto;
+            margin: 0 auto 30px;
+            padding: 10px 30px;
+            border-radius: 60px;
+            border: 2px solid #0f0;
+            letter-spacing: 5px;
+            box-shadow: 0 0 20px rgba(0,255,0,0.5);
+        }
+
+        .video-box {
+            margin: 30px 0;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid #0ff;
+            box-shadow: 0 0 20px rgba(0,255,255,0.3);
+        }
+
+        iframe {
+            width: 100%;
+            height: 250px;
+            border: none;
+        }
+
+        .artefact {
+            background: rgba(0, 30, 0, 0.6);
+            border-left: 5px solid #0f0;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 15px;
+            transition: 0.3s;
+        }
+
+        .artefact:hover {
+            transform: translateX(10px);
+            background: rgba(0, 50, 0, 0.8);
+        }
+
+        .artefact h2 {
+            color: #0ff;
+            margin-bottom: 12px;
+            font-size: 1.8rem;
+        }
+
+        .button {
+            display: inline-block;
+            background: linear-gradient(45deg, #0a0, #080);
+            color: #000;
+            text-decoration: none;
+            padding: 12px 28px;
+            margin-top: 15px;
+            border-radius: 40px;
+            font-weight: bold;
+            font-family: monospace;
+            font-size: 1.2rem;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 0 10px #0f0;
+        }
+
+        .button:hover {
+            animation: pulse 0.5s ease;
+            background: #0f0;
+            box-shadow: 0 0 30px #0f0;
+        }
+
+        .quiz {
+            background: #051005;
+            border: 2px solid #0ff;
+            border-radius: 25px;
+            padding: 25px;
+            margin-top: 40px;
+        }
+
+        .quiz h3 {
+            color: #f0f;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .quiz label {
+            display: block;
+            margin: 12px 0;
+            cursor: pointer;
+        }
+
+        .code {
+            background: #000;
+            padding: 20px;
+            text-align: center;
+            font-size: 2rem;
+            font-weight: bold;
+            letter-spacing: 4px;
+            border-radius: 20px;
+            margin-top: 20px;
+            border: 2px dashed #0f0;
+            display: none;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 12px;
+            height: 20px;
+            background: #0f0;
+            animation: blink 1s infinite;
+            margin-left: 5px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.7rem;
+            color: #4a4;
+        }
+
+        @media (max-width: 600px) {
+            .container { padding: 15px; }
+            h1 { font-size: 1.6rem; }
+            .timer { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>⚠️ АРИФМЕТИЧЕСКИЙ ВЗЛОМ ⚠️</h1>
+    <div style="text-align: center;">
+        <div class="glitch">>> СИСТЕМА ВЗЛОМАНА <<</div>
+    </div>
+
+    <div style="text-align: center;">
+        <div class="timer" id="timerDisplay">30:00</div>
+    </div>
+
+    <!-- ВСТАВЬТЕ СВОЁ ВИДЕО С RUTUBE ЗДЕСЬ -->
+    <div class="video-box">
+        <iframe src="https://rutube.ru/play/embed/ВАШ_КОД_ВИДЕО" allowfullscreen></iframe>
+    </div>
+
+    <div style="text-align: center; margin-bottom: 20px;">
+        <div class="cursor"></div> <span id="typing"></span>
+    </div>
+
+    <div class="artefact">
+        <h2>🔊 АРТЕФАКТ 1 — ГОЛОС ПРАВИЛ</h2>
+        <p>Активируй нейросеть TTSMaker. Озвучь любое правило делимости (на 2,5 или 10). Услышишь глас из будущего.</p>
+        <a href="https://ttsmaker.com/ru" target="_blank" class="button">🎙️ ЗАПУСТИТЬ АРТЕФАКТ</a>
+    </div>
+
+    <div class="artefact">
+        <h2>🎨 АРТЕФАКТ 2 — ВИЗУАЛИЗАТОР</h2>
+        <p>Породи число в нейросети Craiyon. Придумай промпт: «огромное 999, кратное 9, в стиле киберпанк».</p>
+        <a href="https://craiyon.com" target="_blank" class="button">🖌️ ЗАПУСТИТЬ АРТЕФАКТ</a>
+    </div>
+
+    <div class="artefact">
+        <h2>🤖 АРТЕФАКТ 3 — ИСПОЛНИТЕЛЬ ПОРЯДКА</h2>
+        <p>Вызови робота-учителя. Спроси, как решить (4+3)×2–10÷5. А потом дай ему неверный ответ и смотри, как исправляет.</p>
+        <a href="https://poe.com/robot5class" target="_blank" class="button">⚙️ ЗАПУСТИТЬ АРТЕФАКТ</a>
+    </div>
+
+    <!-- ФИНАЛЬНЫЙ ТЕСТ -->
+    <div class="quiz">
+        <h3>🔐 ФИНАЛЬНЫЙ ТЕСТ ДОСТУПА 🔐</h3>
+        <p><strong>1️⃣</strong> Какое число делится на 3?</p>
+        <label><input type="radio" name="q1" value="124"> 124</label>
+        <label><input type="radio" name="q1" value="231"> 231</label>
+        <label><input type="radio" name="q1" value="350"> 350</label>
+        <label><input type="radio" name="q1" value="1001"> 1001</label>
+
+        <p><strong>2️⃣</strong> Как решить 20 – 6 ÷ 3 по правилам?</p>
+        <label><input type="radio" name="q2" value="bad"> Сначала 20 – 6 = 14</label>
+        <label><input type="radio" name="q2" value="good"> Сначала 6 ÷ 3 = 2, потом 20 – 2 = 18</label>
+
+        <p><strong>3️⃣</strong> 567 делится на 9? (сумма цифр 18)</p>
+        <label><input type="radio" name="q3" value="yes"> ДА, делится</label>
+        <label><input type="radio" name="q3" value="no"> НЕТ</label>
+
+        <button onclick="checkFinal()" class="button" style="margin-top: 20px;">🔓 ПРОВЕРИТЬ ДОСТУП</button>
+        <div id="finalCode" class="code"></div>
+    </div>
+
+    <footer>
+        ⚡ СЕКРЕТНАЯ ОПЕРАЦИЯ «ПОРЯДОК» • ТОЛЬКО ДЛЯ АГЕНТОВ 5 КЛАССА ⚡
+    </footer>
+</div>
+
+<script>
+    // ТАЙМЕР ОБРАТНОГО ОТСЧЁТА (30 минут)
+    let timeLeft = 30 * 60;
+    const timerEl = document.getElementById('timerDisplay');
+    const countdownInterval = setInterval(() => {
+        if (timeLeft <= 0) {
+            clearInterval(countdownInterval);
+            timerEl.innerText = "00:00";
+            timerEl.style.color = "#f00";
+            timerEl.style.borderColor = "#f00";
+            alert("ВРЕМЯ ВЫШЛО! Но агент может продолжить миссию — правила не сдаются.");
+            return;
+        }
+        timeLeft--;
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        timerEl.innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }, 1000);
+
+    // ПЕЧАТАЮЩИЙСЯ ТЕКСТ (эффект терминала)
+    const textLines = [
+        "> ВНИМАНИЕ, АГЕНТ!",
+        "> СЕРВЕР «ЧИСЛА» АТАКОВАН.",
+        "> ПРИЗНАКИ ДЕЛИМОСТИ И ПОРЯДОК ДЕЙСТВИЙ УДАЛЕНЫ.",
+        "> ВЫПОЛНИ ТРИ АРТЕФАКТА И ПРОЙДИ ТЕСТ.",
+        "> У ТЕБЯ 30 МИНУТ. УДАЧИ."
+    ];
+    let lineIndex = 0;
+    let charIndex = 0;
+    const typingElement = document.getElementById('typing');
+    function typeEffect() {
+        if (lineIndex < textLines.length) {
+            if (charIndex < textLines[lineIndex].length) {
+                typingElement.innerHTML = textLines[lineIndex].substring(0, charIndex + 1);
+                charIndex++;
+                setTimeout(typeEffect, 50);
+            } else {
+                typingElement.innerHTML += '<br>';
+                lineIndex++;
+                charIndex = 0;
+                setTimeout(typeEffect, 300);
+            }
+        }
+    }
+    typeEffect();
+
+    // ФИНАЛЬНЫЙ ТЕСТ С ВЫДАЧЕЙ КОДА И ЭФФЕКТОМ ВЗРЫВА
+    function checkFinal() {
+        let q1 = document.querySelector('input[name="q1"]:checked');
+        let q2 = document.querySelector('input[name="q2"]:checked');
+        let q3 = document.querySelector('input[name="q3"]:checked');
+        let resultDiv = document.getElementById('finalCode');
+
+        if (!q1 || !q2 || !q3) {
+            alert("❌ Агент, выбери ответы на все три вопроса!");
+            return;
+        }
+
+        let isCorrect = (q1.value === "231" && q2.value === "good" && q3.value === "yes");
+
+        if (isCorrect) {
+            resultDiv.style.display = "block";
+            resultDiv.innerHTML = "✅ ДОСТУП РАЗРЕШЁН ✅<br><span style='font-size: 2rem; background: #0f0; color: #000; padding: 8px 20px; border-radius: 30px; display: inline-block; margin-top: 15px;'>ДЕБАГГЕР-2026</span><br><span style='font-size: 1rem;'>🔒 ЗАПИШИ КОД В ТЕТРАДЬ 🔒</span>";
+            resultDiv.style.border = "3px solid #0f0";
+            resultDiv.style.boxShadow = "0 0 30px #0f0";
+            // Эффект "взрыва" кода
+            resultDiv.style.animation = "glow 1s ease-out";
+            // проиграем воображаемый звуковой сигнал (веб-синтезатор)
+            try {
+                let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                let oscillator = audioCtx.createOscillator();
+                let gainNode = audioCtx.createGain();
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                oscillator.frequency.value = 880;
+                gainNode.gain.value = 0.3;
+                oscillator.start();
+                gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 1);
+                oscillator.stop(audioCtx.currentTime + 0.8);
+            } catch(e) { console.log("звук не поддерживается"); }
+        } else {
+            resultDiv.style.display = "block";
+            resultDiv.style.border = "2px solid #f80";
+            resultDiv.style.boxShadow = "none";
+            resultDiv.innerHTML = "⚠️ НЕВЕРНО! Повтори артефакты и вернись. ⚠️";
+            resultDiv.style.background = "#310";
+            resultDiv.style.color = "#f80";
+            setTimeout(() => { resultDiv.style.display = "none"; }, 2500);
+        }
+    }
+</script>
+</body>
+</html>
